@@ -6,10 +6,10 @@
  * 2. doGet: rota padrão (cotas e tickets para o sorteio) e rota 'adminList' (lista de reservas para o painel)
  */
 
-const SPREADSHEET_ID = "1p49fw8iNIkNSbn1e1N-DQtqTmQKBybvr0DEsPd7rSow";
+const SPREADSHEET_ID = "1TopALI7FAZMiG65z9NBYTlTx23kJWkY_4mBGJq5Gvrq9r-Epnz3HYY9Y";
 const SHEET_RSVP = "Confirmações";
 const SHEET_RIFA = "Rifa";
-const ADMIN_PASSWORD = "casamentoluanemadu"; // Altere se desejar outra senha
+const ADMIN_PASSWORD = "Lum@06112020";
 
 function doPost(e) {
   try {
