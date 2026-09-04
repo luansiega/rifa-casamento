@@ -1,26 +1,22 @@
 /**
  * BACKEND GOOGLE APPS SCRIPT (backend.gs)
  * 
- * Instruções:
- * 1. Abra o Google Sheets do casamento (onde já existe a aba de RSVP "Confirmações").
- * 2. Vá em Extensões > Apps Script.
- * 3. Atualize o código do backend para conter as funções abaixo (ou substitua se for arquivo único).
- * 4. Certifique-se de criar uma aba chamada "Rifa" com os cabeçalhos:
- *    Data/Hora | Grupo ID | Comprador | Cotas | Qtd | Valor (R$) | Status
- * 5. Clique em Implantar > Gerenciar implantações > Editar > Nova versão > Implantar.
- * 6. Copie a URL do Web App gerada e cole na variável SCRIPT_URL em script.js.
+ * Atualizado com:
+ * 1. doPost: rota 'buyRaffle' (reserva do convidado) e 'confirmPayment' (baixa do admin)
+ * 2. doGet: rota padrão (cotas e tickets para o sorteio) e rota 'adminList' (lista de reservas para o painel)
  */
 
 const SPREADSHEET_ID = "1p49fw8iNIkNSbn1e1N-DQtqTmQKBybvr0DEsPd7rSow";
 const SHEET_RSVP = "Confirmações";
 const SHEET_RIFA = "Rifa";
+const ADMIN_PASSWORD = "casamentoluanemadu"; // Altere se desejar outra senha
 
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents || "{}");
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-    // Rota da Rifa
+    // Rota 1: Convidado reservando cotas
     if (payload.action === "buyRaffle") {
       let sheetRifa = ss.getSheetByName(SHEET_RIFA);
       if (!sheetRifa) {
@@ -35,13 +31,33 @@ function doPost(e) {
         payload.quotas.join(", "),
         payload.quotas.length,
         payload.totalAmount,
-        "Pendente (Aguardando Pix)" // Altere manualmente para 'Confirmado' ou 'Pago' ao conferir o Pix
+        "Pendente (Aguardando Pix)"
       ]);
 
       return jsonResponse({ ok: true, message: "Reserva realizada com sucesso!" });
     }
 
-    // Rota tradicional do RSVP (caso compartilhe o mesmo backend)
+    // Rota 2: Admin confirmando o Pix pelo painel
+    if (payload.action === "confirmPayment") {
+      if (payload.password !== ADMIN_PASSWORD) {
+        return jsonResponse({ ok: false, error: "Senha incorreta!" });
+      }
+
+      const sheetRifa = ss.getSheetByName(SHEET_RIFA);
+      if (!sheetRifa) return jsonResponse({ ok: false, error: "Aba Rifa não encontrada." });
+
+      const rowIndex = parseInt(payload.rowIndex, 10);
+      if (!rowIndex || rowIndex < 2) return jsonResponse({ ok: false, error: "Linha inválida." });
+
+      // Coluna 7 é a coluna de Status
+      const currentStatus = sheetRifa.getRange(rowIndex, 7).getValue();
+      const newStatus = payload.status || "Confirmado";
+      sheetRifa.getRange(rowIndex, 7).setValue(newStatus);
+
+      return jsonResponse({ ok: true, message: `Status alterado para ${newStatus} com sucesso!` });
+    }
+
+    // Rota 3: RSVP tradicional
     const sheet = ss.getSheetByName(SHEET_RSVP);
     if (!sheet) throw new Error("Aba 'Confirmações' não encontrada.");
 
@@ -65,19 +81,43 @@ function doPost(e) {
   }
 }
 
-// Retorna as cotas reservadas/pagas e tickets aptos para o sorteador
 function doGet(e) {
   try {
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheetRifa = ss.getSheetByName(SHEET_RIFA);
 
     if (!sheetRifa) {
-      return jsonResponse({ ok: true, takenQuotas: [], paidTickets: [] });
+      return jsonResponse({ ok: true, takenQuotas: [], paidTickets: [], orders: [] });
     }
 
     const data = sheetRifa.getDataRange().getValues();
+
+    // Rota especial do painel admin
+    if (e && e.parameter && e.parameter.action === "adminList") {
+      if (e.parameter.password !== ADMIN_PASSWORD) {
+        return jsonResponse({ ok: false, error: "Senha incorreta!" });
+      }
+
+      const orders = [];
+      for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        orders.push({
+          rowIndex: i + 1, // 1-indexed para facilitar o update
+          date: row[0] instanceof Date ? Utilities.formatDate(row[0], "GMT-3", "dd/MM/yyyy HH:mm") : String(row[0]),
+          groupId: String(row[1] || ""),
+          buyer: String(row[2] || "Sem Nome"),
+          quotas: String(row[3] || ""),
+          qty: row[4],
+          amount: row[5],
+          status: String(row[6] || "Pendente")
+        });
+      }
+      return jsonResponse({ ok: true, orders: orders.reverse() }); // Mais recentes primeiro
+    }
+
+    // Rota padrão (para a página pública carregar cotas e sorteador)
     const taken = [];
-    const paidTickets = []; // Array de { number: 14, buyer: "Nome" }
+    const paidTickets = [];
 
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
@@ -89,8 +129,8 @@ function doGet(e) {
         const num = parseInt(c.trim(), 10);
         if (!isNaN(num)) {
           taken.push(num);
-          // Se confirmado, pago ou em branco no teste, entra no sorteador
-          if (status.includes("confirmado") || status.includes("pago") || status === "") {
+          // Apenas confirmados/pagos entram no sorteio oficial
+          if (status.includes("confirmado") || status.includes("pago")) {
             paidTickets.push({ number: num, buyer: buyer });
           }
         }

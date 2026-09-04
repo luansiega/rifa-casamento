@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel da Rifa | Luan & Madu</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .admin-container {
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid #dcd7cc;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #ede8dc;
+      padding-bottom: 16px;
+    }
+    .auth-box {
+      max-width: 360px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid #f0ecdf;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .order-buyer {
+      font-weight: 700;
+      color: var(--green1);
+      font-size: 15px;
+    }
+    .order-details {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .order-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .badge-confirmed {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .btn-action-confirm {
+      background: #166534;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-action-confirm:hover {
+      background: #14532d;
+    }
+    .btn-action-pending {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .back-link {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <a href="index.html" class="back-link">← Voltar para o Site da Rifa</a>
+
+    <!-- Tela de Login -->
+    <div id="authScreen" class="admin-card auth-box">
+      <div class="section-kicker">Acesso Restrito</div>
+      <h2 style="font-family: var(--serif); font-size: 28px; margin: 10px 0;">Painel de Controle</h2>
+      <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">Digite a senha para gerenciar os pagamentos da rifa.</p>
+      <div class="rsvp-field">
+        <input type="password" id="adminPassInput" placeholder="Senha do painel" style="text-align: center;">
+      </div>
+      <button type="button" class="round-button" style="width: 100%;" onclick="loadAdminOrders()">
+        <span>Entrar</span>
+      </button>
+    </div>
+
+    <!-- Tela Principal dos Pedidos -->
+    <div id="ordersScreen" class="admin-card hidden">
+      <div class="admin-header">
+        <div>
+          <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green1);">Reservas e Pagamentos</h2>
+          <span id="summaryText" style="font-size: 13px; color: var(--muted);">Carregando dados...</span>
+        </div>
+        <button type="button" class="outline-button" style="padding: 6px 14px; font-size: 11px;" onclick="loadAdminOrders()">
+          🔄 Atualizar
+        </button>
+      </div>
+
+      <div id="ordersList">
+        <!-- Itens inseridos via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3TT-BFivmXn1QyPHjBXMfGsh_m5o8YkoRNk2CZ0XcmiRlXnYWXAkR4t-T55hyNRS7/exec";
+    let savedPass = localStorage.getItem("rifa_admin_pass") || "";
+
+    async function loadAdminOrders() {
+      const pass = savedPass || document.getElementById("adminPassInput").value.trim();
+      if (!pass) {
+        alert("Por favor, digite a senha!");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=adminList&password=${encodeURIComponent(pass)}`);
+        const data = await res.json();
+
+        if (!data.ok) {
+          alert("Erro: " + (data.error || "Acesso negado"));
+          localStorage.removeItem("rifa_admin_pass");
+          savedPass = "";
+          return;
+        }
+
+        // Salva senha na sessão local
+        savedPass = pass;
+        localStorage.setItem("rifa_admin_pass", pass);
+
+        document.getElementById("authScreen").classList.add("hidden");
+        document.getElementById("ordersScreen").classList.remove("hidden");
+
+        renderOrders(data.orders || []);
+      } catch (err) {
+        alert("Erro ao carregar dados. Verifique a internet e a implantação do Apps Script.");
+        console.error(err);
+      }
+    }
+
+    function renderOrders(orders) {
+      const list = document.getElementById("ordersList");
+      const summary = document.getElementById("summaryText");
+      list.innerHTML = "";
+
+      let totalCollected = 0;
+      let totalQuotasPaid = 0;
+
+      if (!orders.length) {
+        list.innerHTML = `<p style="text-align: center; color: var(--muted); padding: 30px;">Nenhuma reserva registrada ainda.</p>`;
+        summary.textContent = "0 reservas registradas.";
+        return;
+      }
+
+      orders.forEach(order => {
+        const isConfirmed = order.status.toLowerCase().includes("confirmado") || order.status.toLowerCase().includes("pago");
+        if (isConfirmed) {
+          totalCollected += parseFloat(order.amount || 0);
+          totalQuotasPaid += parseInt(order.qty || 0);
+        }
+
+        const item = document.createElement("div");
+        item.className = "order-item";
+        item.innerHTML = `
+          <div style="flex: 1; min-width: 200px;">
+            <div class="order-buyer">${order.buyer}</div>
+            <div class="order-details">
+              📅 ${order.date} • <strong>${order.qty} cota(s)</strong>: [${order.quotas}] • <strong>R$ ${order.amount},00</strong>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="order-badge ${isConfirmed ? 'badge-confirmed' : 'badge-pending'}">
+              ${isConfirmed ? 'Confirmado' : 'Pendente'}
+            </span>
+            <button class="${isConfirmed ? 'btn-action-pending' : 'btn-action-confirm'}" onclick="toggleStatus(${order.rowIndex}, '${isConfirmed ? 'Pendente' : 'Confirmado'}')">
+              ${isConfirmed ? 'Marcar Pendente' : '✓ Confirmar Pix'}
+            </button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+
+      summary.innerHTML = `<strong>${orders.length} reservas</strong> • Confirmado no caixa: <strong style="color: #166534;">R$ ${totalCollected},00</strong> (${totalQuotasPaid} cotas)`;
+    }
+
+    async function toggleStatus(rowIndex, newStatus) {
+      if (!confirm(`Deseja alterar o status para "${newStatus}"?`)) return;
+
+      try {
+        const payload = {
+          action: "confirmPayment",
+          password: savedPass,
+          rowIndex: rowIndex,
+          status: newStatus
+        };
+
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          loadAdminOrders();
+        } else {
+          alert("Erro: " + data.error);
+        }
+      } catch (err) {
+        alert("Erro ao atualizar status.");
+        console.error(err);
+      }
+    }
+
+    // Auto-login se já tiver a senha salva
+    if (savedPass) {
+      loadAdminOrders();
+    }
+  </script>
+</body>
+</html>
