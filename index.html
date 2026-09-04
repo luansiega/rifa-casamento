@@ -3,115 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rifa de Casamento | Concorra a uma Caixa de Som JBL</title>
+  <title>Rifa de Casamento | Luan & Madu</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti para a comemoração do sorteio -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="badge">Rifa Beneficente de Casamento 💍</div>
-    <h1>Concorra a uma Caixa de Som JBL</h1>
-    <p class="subtitle">Escolha seus números da sorte e apoie nossa nova jornada a dois!</p>
-    
-    <div class="prize-card">
-      <div class="prize-img-placeholder">
-        <span class="prize-icon">🔊</span>
+  <!-- SEÇÃO RIFA DE CASAMENTO -->
+  <section class="rifa-section" id="rifa">
+    <div class="rifa-container">
+      <div class="section-kicker">Ação Entre Amigos • Luan & Madu</div>
+      <h2 class="rifa-title">Nossa Rifa de <em>Casamento</em></h2>
+      <p class="rifa-description">
+        No lugar da tradicional lista de presentes, criamos a nossa Rifa Oficial! Cada cota é um pedacinho do nosso presente e dá direito a concorrer a 3 sorteios presenciais no dia <strong>12 de setembro</strong>:
+      </p>
+
+      <!-- Cards dos Prêmios -->
+      <div class="prizes-grid">
+        <div class="prize-card main-prize">
+          <span class="prize-tag">1º Sorteio Principal</span>
+          <h3>Smart TV 43" 4K UHD</h3>
+          <p>Ou transferência de <strong>R$ 1.500 direto na sua conta via Pix</strong> (à sua escolha!).</p>
+        </div>
+        <div class="prize-card">
+          <span class="prize-tag">2º Sorteio</span>
+          <h3>1 Garrafa Whisky Ballantine's</h3>
+          <p>Escocês legítimo para brindar com a gente.</p>
+        </div>
+        <div class="prize-card">
+          <span class="prize-tag">3º Sorteio</span>
+          <h3>1 Garrafa Whisky Ballantine's</h3>
+          <p>Mais um escocês para celebrar com a gente.</p>
+        </div>
       </div>
-      <div class="prize-info">
-        <span class="prize-tag">Prêmio Oficial</span>
-        <h3>JBL PartyBox / Caixa Portátil</h3>
-        <p class="price-per-number">Apenas <strong>R$ 100,00</strong> por número</p>
+
+      <!-- Seletor Rápido de Combos -->
+      <div class="combos-wrapper">
+        <p class="combos-label">Escolha um combo de presente ou toque nos números abaixo:</p>
+        <div class="combos-buttons">
+          <button type="button" class="combo-btn" onclick="selectCombo(1)">
+            1 cota • R$ 25
+            <span class="sub">Apoio individual</span>
+          </button>
+          <button type="button" class="combo-btn" onclick="selectCombo(2)">
+            2 cotas • R$ 50
+            <span class="sub">R$ 25 por cota</span>
+          </button>
+          <button type="button" class="combo-btn highlight" onclick="selectCombo(5)">
+            Combo Casal • R$ 100
+            <span class="sub">5 cotas (sai a R$ 20 cada)</span>
+          </button>
+          <button type="button" class="combo-btn" onclick="selectCombo(11)">
+            Combo Padrinho • R$ 200
+            <span class="sub">11 cotas (1 cota bônus grátis)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Grade de Cotas (1 a 150) -->
+      <div class="quota-legend">
+        <span><i class="legend-box available"></i> Livre</span>
+        <span><i class="legend-box selected"></i> Selecionado</span>
+        <span><i class="legend-box taken"></i> Reservado</span>
+      </div>
+
+      <div id="quota-grid" class="quota-grid">
+        <!-- Gerado dinamicamente de 001 a 150 -->
+      </div>
+
+      <!-- Botão para abrir o Sorteador ao Vivo na Festa -->
+      <div style="text-align: center; margin-top: 45px;">
+        <button type="button" class="outline-button" onclick="openDrawStage()">
+          <span>🎰 Abrir Painel do Sorteio ao Vivo</span>
+        </button>
       </div>
     </div>
+  </section>
 
-    <div class="stats-bar">
-      <div class="progress-wrap">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-      <div class="stats-labels">
-        <span id="statSold">0 vendidos</span>
-        <span id="statAvailable">100 disponíveis</span>
-      </div>
+  <!-- Barra Flutuante de Checkout -->
+  <div id="rifa-checkout-bar" class="rifa-checkout-bar hidden">
+    <div class="checkout-info">
+      <span id="selected-summary">0 cotas selecionadas</span>
+      <strong id="selected-total">Total: R$ 0,00</strong>
     </div>
-  </header>
-
-  <main class="container">
-    <div class="legend">
-      <div class="legend-item"><span class="dot available"></span> Disponível</div>
-      <div class="legend-item"><span class="dot selected"></span> Selecionado</div>
-      <div class="legend-item"><span class="dot reserved"></span> Reservado</div>
-      <div class="legend-item"><span class="dot paid"></span> Pago</div>
-    </div>
-
-    <!-- Grade dos 100 números -->
-    <div class="numbers-grid" id="numbersGrid"></div>
-  </main>
-
-  <!-- Barra Flutuante de Seleção (Mobile & Desktop) -->
-  <aside class="floating-bar" id="floatingBar">
-    <div class="floating-content">
-      <div class="selection-summary">
-        <span class="count-label" id="selectedCountText">0 números selecionados</span>
-        <span class="total-label" id="totalPriceText">R$ 0,00</span>
-      </div>
-      <button class="btn-primary" id="btnContinue">Continuar</button>
-    </div>
-  </aside>
+    <button type="button" class="round-button" onclick="openRifaModal()">
+      <span>Avançar para Pix</span>
+    </button>
+  </div>
 
   <!-- Modal de Checkout / Pix -->
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-card">
-      <button class="modal-close" id="btnCloseModal">&times;</button>
+  <div id="rifa-modal" class="rifa-modal hidden">
+    <div class="rifa-modal-content">
+      <button type="button" class="modal-close" onclick="closeRifaModal()">&times;</button>
       
-      <!-- Passo 1: Identificação -->
-      <div id="stepForm">
-        <h3>Quase lá! 🎉</h3>
-        <p class="modal-desc">Preencha seus dados para reservar seus números.</p>
-        
-        <div class="selected-tags" id="selectedTags"></div>
+      <p class="micro-label">FINALIZAR RESERVA</p>
+      <h3 id="modal-title">Confirme suas Cotas</h3>
+      <p id="modal-quotas-text" class="modal-desc"></p>
 
-        <form id="reservationForm">
-          <div class="input-group">
-            <label for="fullName">Nome e Sobrenome *</label>
-            <input type="text" id="fullName" placeholder="Ex: Luan Siega" required>
-          </div>
-          <div class="input-group">
-            <label for="whatsapp">WhatsApp (com DDD) *</label>
-            <input type="tel" id="whatsapp" placeholder="(21) 99999-9999" required>
-          </div>
-          <button type="submit" class="btn-primary full-width">Ir para o Pagamento PIX</button>
-        </form>
-      </div>
-
-      <!-- Passo 2: Resumo e Pagamento -->
-      <div id="stepPix" class="hidden">
-        <div class="success-icon">⏳</div>
-        <h3>Reserva Realizada!</h3>
-        <p class="modal-desc">Faça o PIX para garantir seus bilhetes. O comprovante será verificado manualmente.</p>
-
-        <div class="pix-box">
-          <span class="pix-label">Valor Total a Pagar</span>
-          <span class="pix-total" id="pixTotalValue">R$ 0,00</span>
-          
-          <div class="pix-key-wrap">
-            <span class="pix-key-label">Chave PIX (E-mail / Telefone / CNPJ)</span>
-            <div class="copy-box">
-              <input type="text" id="pixKeyInput" value="seupix@email.com" readonly>
-              <button class="btn-copy" id="btnCopyPix">Copiar</button>
-            </div>
-          </div>
+      <form id="rifa-form">
+        <div class="rsvp-field">
+          <label for="rifa-buyer">Seu Nome / Família do Convite</label>
+          <input id="rifa-buyer" type="text" placeholder="Ex.: Danieli Ribeiro" required>
         </div>
 
-        <div class="notice-box">
-          ⚠️ <strong>Atenção:</strong> Os números ficam reservados temporariamente. Envie o comprovante pelo WhatsApp após pagar para confirmarmos a baixa.
+        <div class="pix-payment-box">
+          <p>Chave Pix (Telefone / Celular):</p>
+          <div class="pix-key-wrapper">
+            <input id="pix-key-input" type="text" value="10299329992" readonly>
+            <button type="button" class="copy-pix-btn" onclick="copyPixKey()">Copiar Pix</button>
+          </div>
+          <small>Após transferir o valor pelo seu banco, clique abaixo para enviar o comprovante no WhatsApp e validarmos na hora!</small>
         </div>
 
-        <button class="btn-primary full-width" id="btnFinish">Concluir</button>
+        <button type="submit" id="btn-submit-rifa" class="rsvp-submit">
+          <span>Confirmar e Avisar no WhatsApp</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TELA CHEIA DO SORTEIO (AO VIVO NO DIA 12) -->
+  <div id="draw-stage" class="draw-stage hidden">
+    <button type="button" class="draw-close" onclick="closeDrawStage()">&times; Sair da Tela Cheia</button>
+    <div class="draw-container">
+      <p class="micro-label" style="color: var(--gold2);">MOMENTO DO SORTEIO • LUAN & MADU</p>
+
+      <div class="draw-stage-prizes">
+        <div id="step-3" class="draw-prize-badge active">1º Passo: 3º Lugar (Whisky)</div>
+        <div id="step-2" class="draw-prize-badge">2º Passo: 2º Lugar (Whisky)</div>
+        <div id="step-1" class="draw-prize-badge">3º Passo: 1º Lugar (Smart TV / Pix)</div>
       </div>
 
+      <!-- Roleta de Números e Nomes -->
+      <div class="roulette-box">
+        <div id="roulette-number" class="roulette-number">000</div>
+        <div id="roulette-name" class="roulette-name">Aguardando início...</div>
+      </div>
+
+      <div class="draw-actions">
+        <button id="btn-draw" type="button" class="round-button" onclick="runDrawStep()">
+          <span>Sortear 3º Lugar 🎁</span>
+        </button>
+      </div>
+
+      <!-- Pódio dos Vencedores -->
+      <div class="podium-grid">
+        <div class="podium-card" id="podium-3">
+          <small>3º Lugar • Whisky Ballantine's</small>
+          <strong class="winner-name">---</strong>
+          <span class="winner-cota">Cota: --</span>
+        </div>
+        <div class="podium-card" id="podium-2">
+          <small>2º Lugar • Whisky Ballantine's</small>
+          <strong class="winner-name">---</strong>
+          <span class="winner-cota">Cota: --</span>
+        </div>
+        <div class="podium-card gold-card" id="podium-1">
+          <small>1º Lugar • Smart TV 43" 4K (ou R$ 1.500)</small>
+          <strong class="winner-name">---</strong>
+          <span class="winner-cota">Cota: --</span>
+        </div>
+      </div>
     </div>
   </div>
 
