@@ -11,10 +11,18 @@ const SHEET_RSVP = "Confirmações";
 const SHEET_RIFA = "Rifa";
 const ADMIN_PASSWORD = "Lum@06112020";
 
+function getSpreadsheet() {
+  try {
+    return SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
+  } catch (e) {
+    return SpreadsheetApp.openById(SPREADSHEET_ID);
+  }
+}
+
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents || "{}");
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const ss = getSpreadsheet();
 
     // Rota 1: Convidado reservando cotas
     if (payload.action === "buyRaffle") {
@@ -83,7 +91,7 @@ function doPost(e) {
 
 function doGet(e) {
   try {
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const ss = getSpreadsheet();
     const sheetRifa = ss.getSheetByName(SHEET_RIFA);
 
     if (!sheetRifa) {
