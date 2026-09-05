@@ -27,7 +27,7 @@
         <div class="prize-card main-prize">
           <span class="prize-tag">1º Sorteio Principal</span>
           <h3>Smart TV 43" 4K UHD</h3>
-          <p>Ou transferência de <strong>R$ 1.500 direto na sua conta via Pix</strong> (à sua escolha!).</p>
+          <p>O grande prêmio da noite para turbinar a sua sala ou quarto!</p>
         </div>
         <div class="prize-card">
           <span class="prize-tag">2º Sorteio</span>
@@ -46,25 +46,25 @@
         <p class="combos-label">Escolha um combo de presente ou toque nos números abaixo:</p>
         <div class="combos-buttons">
           <button type="button" class="combo-btn" onclick="selectCombo(1)">
-            1 cota • R$ 25
-            <span class="sub">Apoio individual</span>
+            1 cota • R$ 100
+            <span class="sub">1 número da sorte</span>
           </button>
           <button type="button" class="combo-btn" onclick="selectCombo(2)">
-            2 cotas • R$ 50
-            <span class="sub">R$ 25 por cota</span>
+            2 cotas • R$ 200
+            <span class="sub">2 números da sorte</span>
           </button>
-          <button type="button" class="combo-btn highlight" onclick="selectCombo(5)">
-            Combo Casal • R$ 100
-            <span class="sub">5 cotas (sai a R$ 20 cada)</span>
+          <button type="button" class="combo-btn highlight" onclick="selectCombo(3)">
+            Combo Casal • R$ 300
+            <span class="sub">3 números da sorte</span>
           </button>
-          <button type="button" class="combo-btn" onclick="selectCombo(11)">
-            Combo Padrinho • R$ 200
-            <span class="sub">11 cotas (1 cota bônus grátis)</span>
+          <button type="button" class="combo-btn" onclick="selectCombo(6)">
+            Combo Padrinho • R$ 500
+            <span class="sub">6 cotas (1 cota bônus grátis)</span>
           </button>
         </div>
       </div>
 
-      <!-- Grade de Cotas (1 a 150) -->
+      <!-- Grade de Cotas (1 a 100) -->
       <div class="quota-legend">
         <span><i class="legend-box available"></i> Livre</span>
         <span><i class="legend-box selected"></i> Selecionado</span>
@@ -72,7 +72,7 @@
       </div>
 
       <div id="quota-grid" class="quota-grid">
-        <!-- Gerado dinamicamente de 001 a 150 -->
+        <!-- Gerado dinamicamente de 001 a 100 -->
       </div>
 
       <!-- Botão para abrir o Sorteador ao Vivo na Festa -->
@@ -163,7 +163,7 @@
           <span class="winner-cota">Cota: --</span>
         </div>
         <div class="podium-card gold-card" id="podium-1">
-          <small>1º Lugar • Smart TV 43" 4K (ou R$ 1.500)</small>
+          <small>1º Lugar • Smart TV 43" 4K UHD</small>
           <strong class="winner-name">---</strong>
           <span class="winner-cota">Cota: --</span>
         </div>

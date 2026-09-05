@@ -1,12 +1,12 @@
 /* =========================================================
-   RIFA DE CASAMENTO • LUAN & MADU (1 A 150)
+   RIFA DE CASAMENTO • LUAN & MADU (1 A 100)
    ========================================================= */
 
 // URL do Google Apps Script publicado
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3TT-BFivmXn1QyPHjBXMfGsh_m5o8YkoRNk2CZ0XcmiRlXnYWXAkR4t-T55hyNRS7/exec";
 
 // Configurações gerais
-const TOTAL_QUOTAS = 150;
+const TOTAL_QUOTAS = 100;
 const WHATSAPP_PHONE = "5521974879191"; // 97487-9191 com DDD 21
 const PIX_KEY = "10299329992"; // Chave Pix fornecida
 
@@ -15,17 +15,15 @@ let takenQuotas = []; // Carregado em tempo real do Google Sheets
 
 /* =========================================================
    CÁLCULO DE COMBOS E PREÇOS
-   1 cota = R$ 25
-   2 cotas = R$ 50
-   5 cotas (Combo Casal) = R$ 100
-   11 cotas (Combo Padrinho) = R$ 200 (1 bônus)
+   1 cota = R$ 100
+   2 cotas = R$ 200
+   3 cotas = R$ 300
+   6 cotas (Combo Padrinho) = R$ 500 (1 cota bônus)
    ========================================================= */
 function calculatePrice(count) {
   if (count <= 0) return 0;
-  if (count >= 11) return Math.floor(count / 11) * 200 + calculatePrice(count % 11);
-  if (count >= 5) return Math.floor(count / 5) * 100 + calculatePrice(count % 5);
-  if (count >= 2) return Math.floor(count / 2) * 50 + calculatePrice(count % 2);
-  return count * 25;
+  if (count >= 6) return Math.floor(count / 6) * 500 + calculatePrice(count % 6);
+  return count * 100;
 }
 
 /* =========================================================
