@@ -6,7 +6,7 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3TT-BFivmXn1QyPHjBXMfGsh_m5o8YkoRNk2CZ0XcmiRlXnYWXAkR4t-T55hyNRS7/exec";
 
 // Configurações gerais
-const TOTAL_QUOTAS = 100;
+const TOTAL_QUOTAS = 200;
 const WHATSAPP_PHONE = "5521974879191"; // 97487-9191 com DDD 21
 const PIX_KEY = "10299329992"; // Chave Pix fornecida
 
@@ -19,6 +19,7 @@ let takenQuotas = []; // Carregado em tempo real do Google Sheets
    2 cotas = R$ 200
    3 cotas = R$ 300
    6 cotas (Combo Padrinho) = R$ 500 (1 cota bônus)
+   10 cotas = R$ 1.000
    ========================================================= */
 function calculatePrice(count) {
   if (count <= 0) return 0;
@@ -274,20 +275,38 @@ function runDrawStep() {
   btn.disabled = true;
   const numEl = document.getElementById("roulette-number");
   const nameEl = document.getElementById("roulette-name");
+  const boxEl = document.querySelector(".roulette-box");
 
-  // Animação de roleta por 3.5 segundos
-  let counter = 0;
-  const interval = setInterval(() => {
-    const randomTicket = eligible[Math.floor(Math.random() * eligible.length)];
-    numEl.textContent = String(randomTicket.number).padStart(3, "0");
-    nameEl.textContent = randomTicket.buyer;
-    counter += 70;
+  // Adiciona efeito de vibração/giro na caixa
+  if (boxEl) boxEl.classList.add("spinning");
+  if (nameEl) nameEl.classList.remove("winner-revealed");
 
-    if (counter >= 3500) {
-      clearInterval(interval);
+  // Animação cinematográfica de 5 segundos com desaceleração progressiva (easing out)
+  const startTime = Date.now();
+  const duration = 5000; // 5 segundos
+  let currentDelay = 50; // Começa super rápido (50ms)
+
+  function spinTick() {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    if (progress < 1) {
+      // Sorteia provisório rápido da lista
+      const randomTicket = eligible[Math.floor(Math.random() * eligible.length)];
+      numEl.textContent = String(randomTicket.number).padStart(3, "0");
+      nameEl.textContent = randomTicket.buyer;
+
+      // Curva cúbica: acelera o delay nos últimos 2 segundos (vai de 50ms até ~420ms)
+      currentDelay = 50 + Math.pow(progress, 3) * 370;
+      setTimeout(spinTick, currentDelay);
+    } else {
+      // Fim do tempo: para exatamente no ganhador definitivo
+      if (boxEl) boxEl.classList.remove("spinning");
+      
       const chosen = eligible[Math.floor(Math.random() * eligible.length)];
       numEl.textContent = String(chosen.number).padStart(3, "0");
       nameEl.textContent = chosen.buyer;
+      if (nameEl) nameEl.classList.add("winner-revealed");
 
       applyWinner(drawStep, chosen);
       btn.disabled = false;
@@ -310,7 +329,9 @@ function runDrawStep() {
         document.getElementById("step-1").classList.remove("active");
       }
     }
-  }, 70);
+  }
+
+  spinTick();
 }
 
 function applyWinner(step, winner) {

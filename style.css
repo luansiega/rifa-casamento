@@ -1,19 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-dark: #10170f;
-  --bg-darker: #0b100a;
-  --green1: #182118;
-  --green2: #223022;
-  --green3: #2d402e;
-  --gold: #b79a61;
-  --gold2: #dbc795;
-  --gold-glow: rgba(183, 154, 97, 0.35);
-  --paper: #f7f4ec;
-  --paper-soft: #ede8dc;
-  --ink: #182118;
-  --muted: #72766c;
-  --line: rgba(183, 154, 97, 0.25);
+  /* PALETA VERDE OLIVA / MILITAR & DOURADO CASAMENTO */
+  --olive-darkest: #1b2419;     /* Fundo escuro profundo / modal */
+  --olive-dark: #273523;        /* Verde militar floresta principal */
+  --olive-primary: #3d5236;     /* Verde militar clássico / botões e destaque */
+  --olive-light: #526c48;       /* Verde oliva médio */
+  --olive-subtle: #e9eee6;      /* Fundo suave esverdeado */
+  --olive-border: #ccd8c7;      /* Bordas suaves oliva */
+  
+  --gold: #b3924f;              /* Dourado champanhe nobre */
+  --gold-light: #d8c289;        /* Dourado claro */
+  --gold-glow: rgba(179, 146, 79, 0.4);
+  
+  --paper: #f8f6f0;             /* Tom papel creme / linho do casamento */
+  --paper-card: #ffffff;        /* Branco puro para cards */
+  --ink: #1e291b;               /* Texto escuro oliva */
+  --muted: #616e5c;             /* Texto secundário oliva suave */
   
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -58,10 +61,10 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: var(--gold);
-  background: rgba(183, 154, 97, 0.12);
+  background: rgba(179, 146, 79, 0.12);
   padding: 6px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(183, 154, 97, 0.25);
+  border: 1px solid rgba(179, 146, 79, 0.3);
   margin-bottom: 1rem;
 }
 
@@ -70,7 +73,7 @@ body {
   font-size: clamp(34px, 6vw, 62px);
   line-height: 1.05;
   font-weight: 600;
-  color: var(--green1);
+  color: var(--olive-dark);
   margin-bottom: 1rem;
 }
 
@@ -89,7 +92,7 @@ body {
 }
 
 .rifa-description strong {
-  color: var(--green1);
+  color: var(--olive-dark);
 }
 
 /* CARDS DE PRÊMIOS */
@@ -101,8 +104,8 @@ body {
 }
 
 .prize-card {
-  background: #ffffff;
-  border: 1px solid #dcd7cc;
+  background: var(--paper-card);
+  border: 1px solid var(--olive-border);
   border-radius: 12px;
   padding: 22px;
   position: relative;
@@ -111,13 +114,13 @@ body {
 
 .prize-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(24, 33, 24, 0.06);
+  box-shadow: 0 10px 24px rgba(39, 53, 35, 0.08);
 }
 
 .prize-card.main-prize {
   border-color: var(--gold);
-  background: linear-gradient(175deg, #ffffff 0%, #faf6ee 100%);
-  box-shadow: 0 8px 24px rgba(183, 154, 97, 0.12);
+  background: linear-gradient(175deg, #ffffff 0%, #fbf8f0 100%);
+  box-shadow: 0 8px 24px rgba(179, 146, 79, 0.15);
 }
 
 .prize-tag {
@@ -135,7 +138,7 @@ body {
   font-size: 1.45rem;
   font-weight: 600;
   line-height: 1.2;
-  color: var(--green1);
+  color: var(--olive-dark);
   margin-bottom: 6px;
 }
 
@@ -146,13 +149,13 @@ body {
 }
 
 .main-prize p {
-  color: #555b4f;
+  color: #495444;
 }
 
 /* SELETOR DE COMBOS */
 .combos-wrapper {
-  background: #ffffff;
-  border: 1px solid #e2ddd2;
+  background: var(--paper-card);
+  border: 1px solid var(--olive-border);
   border-radius: 14px;
   padding: 20px;
   margin-bottom: 2.2rem;
@@ -164,20 +167,20 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--green2);
+  color: var(--olive-primary);
   margin-bottom: 12px;
 }
 
 .combos-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 10px;
 }
 
 .combo-btn {
   background: var(--paper);
-  border: 1px solid var(--gold);
-  color: var(--green1);
+  border: 1px solid var(--olive-border);
+  color: var(--olive-dark);
   padding: 12px 14px;
   font-size: 13px;
   font-weight: 700;
@@ -198,24 +201,24 @@ body {
 }
 
 .combo-btn:hover {
-  background: var(--green2);
-  border-color: var(--green2);
-  color: var(--paper);
+  background: var(--olive-primary);
+  border-color: var(--olive-primary);
+  color: #ffffff;
 }
 
 .combo-btn:hover span.sub {
-  color: var(--gold2);
+  color: var(--gold-light);
 }
 
 .combo-btn.highlight {
-  background: var(--green1);
-  border-color: var(--green1);
-  color: var(--paper);
+  background: var(--olive-dark);
+  border-color: var(--olive-dark);
+  color: #ffffff;
   position: relative;
 }
 
 .combo-btn.highlight span.sub {
-  color: var(--gold2);
+  color: var(--gold-light);
 }
 
 .combo-btn.highlight::after {
@@ -224,7 +227,7 @@ body {
   top: -9px;
   right: 12px;
   background: var(--gold);
-  color: #fff;
+  color: #ffffff;
   font-size: 9px;
   font-weight: 800;
   padding: 2px 6px;
@@ -260,7 +263,7 @@ body {
 
 .legend-box.available {
   background: #ffffff;
-  border: 1px solid #c7c1b5;
+  border: 1px solid var(--olive-border);
 }
 
 .legend-box.selected {
@@ -268,31 +271,31 @@ body {
 }
 
 .legend-box.taken {
-  background: #d5d0c7;
+  background: #d8ded4;
 }
 
 .quota-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
   gap: 8px;
-  max-height: 400px;
+  max-height: 420px;
   overflow-y: auto;
   padding: 16px;
-  background: #ffffff;
-  border: 1px solid #dcd7cc;
+  background: var(--paper-card);
+  border: 1px solid var(--olive-border);
   border-radius: 12px;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .quota-num {
   height: 44px;
   background: #ffffff;
-  border: 1px solid #d2ccbf;
+  border: 1px solid var(--olive-border);
   border-radius: 6px;
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 700;
-  color: var(--green1);
+  color: var(--olive-dark);
   cursor: pointer;
   transition: all 0.15s ease;
   display: flex;
@@ -303,7 +306,7 @@ body {
 .quota-num:hover:not(:disabled) {
   border-color: var(--gold);
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 10px rgba(179, 146, 79, 0.18);
 }
 
 .quota-num.selected {
@@ -315,12 +318,12 @@ body {
 }
 
 .quota-num.taken {
-  background: #ebe7df;
-  border-color: #dfdbd2;
-  color: #a7a297;
+  background: #e6eae2;
+  border-color: #dce1d8;
+  color: #9da697;
   cursor: not-allowed;
   text-decoration: line-through;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 /* BARRA FLUTUANTE CHECKOUT */
@@ -330,7 +333,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: min(92vw, 560px);
-  background: var(--green1);
+  background: var(--olive-darkest);
   color: var(--paper);
   padding: 14px 22px;
   border-radius: 60px;
@@ -338,8 +341,8 @@ body {
   justify-content: space-between;
   align-items: center;
   z-index: 500;
-  box-shadow: 0 12px 36px rgba(16, 23, 15, 0.4);
-  border: 1px solid rgba(183, 154, 97, 0.35);
+  box-shadow: 0 12px 36px rgba(27, 36, 25, 0.45);
+  border: 1px solid rgba(179, 146, 79, 0.4);
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -361,7 +364,7 @@ body {
   font-size: 11px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--gold2);
+  color: var(--gold-light);
   font-weight: 600;
 }
 
@@ -373,9 +376,9 @@ body {
 }
 
 .round-button {
-  background: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 100%);
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
   border: none;
-  color: var(--green1);
+  color: var(--olive-darkest);
   padding: 12px 24px;
   border-radius: 999px;
   font-size: 13px;
@@ -385,18 +388,18 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--sans);
-  box-shadow: 0 4px 12px rgba(183, 154, 97, 0.3);
+  box-shadow: 0 4px 14px rgba(179, 146, 79, 0.35);
 }
 
 .round-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(183, 154, 97, 0.45);
+  box-shadow: 0 6px 20px rgba(179, 146, 79, 0.5);
 }
 
 .outline-button {
   background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--green1);
+  border: 1px solid var(--olive-primary);
+  color: var(--olive-primary);
   padding: 12px 28px;
   border-radius: 999px;
   font-size: 13px;
@@ -409,9 +412,9 @@ body {
 }
 
 .outline-button:hover {
-  background: var(--green1);
-  border-color: var(--green1);
-  color: var(--paper);
+  background: var(--olive-primary);
+  border-color: var(--olive-primary);
+  color: #ffffff;
 }
 
 /* =========================================================
@@ -420,7 +423,7 @@ body {
 .rifa-modal {
   position: fixed;
   inset: 0;
-  background: rgba(16, 23, 15, 0.75);
+  background: rgba(27, 36, 25, 0.8);
   backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
@@ -441,7 +444,7 @@ body {
   position: relative;
   border-radius: 16px;
   border: 1px solid var(--gold);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 
 .modal-close {
@@ -457,7 +460,7 @@ body {
 }
 
 .modal-close:hover {
-  color: var(--green1);
+  color: var(--olive-dark);
 }
 
 .micro-label {
@@ -472,7 +475,7 @@ body {
 .rifa-modal h3 {
   font-family: var(--serif);
   font-size: 26px;
-  color: var(--green1);
+  color: var(--olive-dark);
   margin-bottom: 6px;
 }
 
@@ -484,7 +487,7 @@ body {
 }
 
 .modal-desc strong {
-  color: var(--green1);
+  color: var(--olive-dark);
 }
 
 .rsvp-field {
@@ -498,7 +501,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--green2);
+  color: var(--olive-dark);
   margin-bottom: 6px;
 }
 
@@ -506,31 +509,31 @@ body {
   width: 100%;
   padding: 12px 14px;
   background: #ffffff;
-  border: 1px solid #cdc7ba;
+  border: 1px solid var(--olive-border);
   border-radius: 8px;
   font-size: 14px;
   font-family: var(--sans);
-  color: var(--green1);
+  color: var(--olive-dark);
 }
 
 .rsvp-field input:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(183, 154, 97, 0.2);
+  box-shadow: 0 0 0 3px rgba(179, 146, 79, 0.25);
 }
 
 .pix-payment-box {
-  background: var(--paper-soft);
+  background: var(--olive-subtle);
   padding: 16px;
   border-radius: 10px;
-  border: 1px solid #d9d3c5;
+  border: 1px solid var(--olive-border);
   margin-bottom: 20px;
 }
 
 .pix-payment-box p {
   font-size: 12px;
   font-weight: 700;
-  color: var(--green2);
+  color: var(--olive-dark);
   margin-bottom: 8px;
 }
 
@@ -544,11 +547,11 @@ body {
   flex: 1;
   padding: 10px 12px;
   background: #ffffff;
-  border: 1px solid #b79a61;
+  border: 1px solid var(--gold);
   border-radius: 6px;
   font-size: 12px;
   font-family: monospace;
-  color: var(--green1);
+  color: var(--olive-dark);
 }
 
 .copy-pix-btn {
@@ -578,9 +581,9 @@ body {
 
 .rsvp-submit {
   width: 100%;
-  background: var(--green1);
+  background: var(--olive-primary);
   border: 1px solid var(--gold);
-  color: var(--paper);
+  color: #ffffff;
   padding: 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -593,8 +596,8 @@ body {
 }
 
 .rsvp-submit:hover:not(:disabled) {
-  background: var(--green2);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  background: var(--olive-dark);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
 .rsvp-submit:disabled {
@@ -608,7 +611,7 @@ body {
 .draw-stage {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #1f2c1e 0%, #0d130c 100%);
+  background: radial-gradient(circle at center, #273523 0%, #151d14 100%);
   color: var(--paper);
   z-index: 2000;
   display: flex;
@@ -626,8 +629,8 @@ body {
   top: 24px;
   right: 24px;
   background: transparent;
-  border: 1px solid rgba(219, 199, 149, 0.35);
-  color: var(--gold2);
+  border: 1px solid rgba(216, 194, 137, 0.4);
+  color: var(--gold-light);
   padding: 8px 18px;
   border-radius: 999px;
   font-size: 12px;
@@ -637,7 +640,7 @@ body {
 }
 
 .draw-close:hover {
-  background: rgba(219, 199, 149, 0.15);
+  background: rgba(216, 194, 137, 0.18);
 }
 
 .draw-container {
@@ -655,10 +658,10 @@ body {
 
 .draw-prize-badge {
   padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 11px;
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -666,36 +669,66 @@ body {
 }
 
 .draw-prize-badge.active {
-  border-color: var(--gold2);
-  color: var(--gold2);
-  background: rgba(183, 154, 97, 0.18);
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+  background: rgba(179, 146, 79, 0.22);
   font-weight: 800;
-  box-shadow: 0 0 16px rgba(183, 154, 97, 0.25);
+  box-shadow: 0 0 20px rgba(179, 146, 79, 0.3);
 }
 
+/* CAIXA DA ROLETA CINEMATOGRÁFICA */
 .roulette-box {
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(15, 22, 14, 0.6);
   border: 2px solid var(--gold);
-  border-radius: 16px;
-  padding: 34px 20px;
+  border-radius: 18px;
+  padding: 36px 20px;
   margin-bottom: 26px;
-  box-shadow: 0 0 60px rgba(183, 154, 97, 0.22);
+  box-shadow: 0 0 70px rgba(179, 146, 79, 0.25);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.roulette-box.spinning {
+  animation: rouletteShake 0.12s infinite alternate ease-in-out;
+  box-shadow: 0 0 90px rgba(179, 146, 79, 0.45);
+}
+
+@keyframes rouletteShake {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.015); }
 }
 
 .roulette-number {
   font-family: var(--serif);
-  font-size: clamp(80px, 18vw, 140px);
-  color: var(--gold2);
+  font-size: clamp(84px, 18vw, 145px);
+  color: var(--gold-light);
   line-height: 1;
   letter-spacing: 0.05em;
   font-weight: 700;
+  text-shadow: 0 0 35px rgba(216, 194, 137, 0.5);
+  transition: transform 0.1s;
 }
 
 .roulette-name {
-  font-size: clamp(18px, 4.5vw, 28px);
-  margin-top: 10px;
+  font-size: clamp(20px, 4.5vw, 30px);
+  margin-top: 12px;
   color: #ffffff;
   font-weight: 600;
+  min-height: 40px;
+  letter-spacing: 0.02em;
+}
+
+.roulette-name.winner-revealed {
+  animation: popWinner 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  color: #fff9e6;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes popWinner {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .draw-actions {
@@ -712,7 +745,7 @@ body {
 
 .podium-card {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   padding: 16px 12px;
   border-radius: 10px;
   text-align: center;
@@ -738,14 +771,14 @@ body {
 .podium-card span {
   display: block;
   font-size: 12px;
-  color: var(--gold2);
+  color: var(--gold-light);
   font-weight: 700;
   margin-top: 4px;
 }
 
 .podium-card.gold-card {
   border-color: var(--gold);
-  background: rgba(183, 154, 97, 0.12);
+  background: rgba(179, 146, 79, 0.15);
 }
 
 .podium-card.revealed {
